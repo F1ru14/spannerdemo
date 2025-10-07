@@ -22,6 +22,11 @@ steps:
       - '${_DEPLOY_REGION}'
       - '--platform'
       - '${_PLATFORM}'
+      - '--port'
+      - '8080'
+      - '--set-env-vars=JAVA_TOOL_OPTIONS=-XX:+PrintFlagsFinal'
+      - '--timeout'
+      - '300s'
 options:
   logging: CLOUD_LOGGING_ONLY
   env:
