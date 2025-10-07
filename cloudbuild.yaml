@@ -1,6 +1,5 @@
 steps:
-  - name: 'maven'
-    entrypoint: 'mvn'
+  - name: 'gcr.io/cloud-builders/maven'
     args: ['clean', 'install', '-DskipTests']
   #https://cloud.google.com/build/docs/cloud-builders
   # Build the container image
@@ -22,5 +21,7 @@ steps:
       - '$_DEPLOY_REGION'
 options:
   logging: CLOUD_LOGGING_ONLY
+  env:
+    - 'MAVEN_OPTS=-Dmaven.repo.local=/workspace/.m2/repository'
 
 images: [gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA]
