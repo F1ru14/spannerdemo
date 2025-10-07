@@ -1,20 +1,7 @@
 steps:
-  # Build the application
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        # Install Java 8
-        apt-get update && apt-get install -y openjdk-8-jdk maven
-        export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-        export PATH=$PATH:$JAVA_HOME/bin
-        
-        # Build with Maven
-        mvn clean package -DskipTests
-        
-        # Verify the build output
-        ls -la target/
+  # Build and push the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$COMMIT_SHA', '.']
     
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
