@@ -1,7 +1,19 @@
 steps:
+  # Create a volume to store Maven artifacts
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['volume', 'create', 'maven-repo']
+
+  # Maven build with volume mount
   - name: 'gcr.io/cloud-builders/maven'
     args: ['clean', 'install', '-DskipTests']
-  #https://cloud.google.com/build/docs/cloud-builders
+    volumes:
+      - name: 'maven-repo'
+        path: '/root/.m2'
+    
+  # List the target directory to verify JAR file exists
+  - name: 'ubuntu'
+    args: ['ls', '-la', 'target/']
+    
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA', '.']
